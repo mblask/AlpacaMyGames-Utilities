@@ -37,6 +37,18 @@ namespace AlpacaMyGames
             return randomNumber <= percentageChance;
         }
 
+        public static bool ChanceFunc(float percentageChance)
+        {
+            if (percentageChance == 0.0f)
+                return false;
+
+            if (percentageChance == 100.0f)
+                return true;
+
+            float randomNumber = Random.Range(0.0f, 100.0f);
+            return randomNumber <= percentageChance;
+        }
+
         public static Vector2 GetRandomWorldPosition(int shorteningFactor = 1)
         {
             Vector3 randomScreenPosition = Vector2.up * Screen.height * UnityEngine.Random.Range(0.0f, 1.0f) +
