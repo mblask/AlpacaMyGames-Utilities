@@ -49,13 +49,25 @@ namespace AlpacaMyGames
             return randomNumber <= percentageChance;
         }
 
-        public static Vector2 GetRandomWorldPosition(int shorteningFactor = 1)
+        public static bool CheckObjectEnvironment(Transform objectToCheck, float environmentRadius, LayerMask objectsToAvoid)
+        {
+            float scale = objectToCheck.localScale.x;
+
+            Collider2D[] hits = Physics2D.OverlapCircleAll(objectToCheck.position, environmentRadius * scale, objectsToAvoid);
+
+            if (hits.Length > 1)
+                return true;
+            else
+                return false;
+        }
+
+        public static Vector2 GetRandomWorldPosition(float shorteningFactor = 1.0f, Vector2 worldOriginPosition = default(Vector2))
         {
             Vector3 randomScreenPosition = Vector2.up * Screen.height * UnityEngine.Random.Range(0.0f, 1.0f) +
                         Vector2.right * Screen.width * UnityEngine.Random.Range(0.0f, 1.0f);
-            Vector2 randomPosition = Camera.main.ScreenToWorldPoint(randomScreenPosition);
+            Vector2 randomPosition = Camera.main.ScreenToWorldPoint(randomScreenPosition) / shorteningFactor;
 
-            return randomPosition / shorteningFactor;
+            return worldOriginPosition + randomPosition;
         }
 
         public static Vector2 GetRandomScreenPosition(float borderScaling = 1.0f)
