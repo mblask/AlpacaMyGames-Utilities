@@ -10,6 +10,26 @@ namespace AlpacaMyGames
         /*Methods*/
         /*********/
 
+        public static List<T> GetEnumListByType<T>()
+        {
+            List<T> newList = new List<T>();
+
+            foreach (T enumObject in System.Enum.GetValues(typeof(T)))
+                newList.Add(enumObject);
+
+            return newList;
+        }
+
+        public static int GetEnumTypeAmount<T>()
+        {
+            int count = 0;
+
+            foreach (T objectList in System.Enum.GetValues(typeof(T)))
+                count++;
+
+            return count;
+        }
+
         public static string GetMonthName(int monthNumber)
         {
             string[] months = new string[] { "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December" };
