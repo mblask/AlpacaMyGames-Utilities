@@ -6,6 +6,7 @@ namespace AlpacaMyGames
 {
     public static class Utilities
     {
+        #region Methods
         /*********/
         /*Methods*/
         /*********/
@@ -185,7 +186,9 @@ namespace AlpacaMyGames
                 }
             }
         }
+#endregion
 
+        #region Extensions
         /************/
         /*Extensions*/
         /************/
@@ -199,5 +202,23 @@ namespace AlpacaMyGames
         {
             return new Vector2(-vector.x, -vector.y);
         }
+
+        public static string Bold(this string word)
+        {
+            return "<b>" + word + "</b>";
+        }
+
+        public static string Italics(this string word)
+        {
+            return "<i>" + word + "</i>";
+        }
+
+        public static string Color(this string word, Color color)
+        {
+            string colorString = ColorUtility.ToHtmlStringRGBA(color);
+            return "<color=#" + colorString + ">" + word + "</color>";
+        }
+
+        #endregion
     }
 }
