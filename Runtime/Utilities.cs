@@ -6,10 +6,42 @@ namespace AlpacaMyGames
 {
     public static class Utilities
     {
+        #region CreaterMethods
+        /*****************/
+        /*Creater Methods*/
+        /*****************/
+
+        public static TextMesh CreateTextObject(string text, Vector3 position, int fontSize = 20, TextAlignment textAlignment = default(TextAlignment), TextAnchor textAnchor = default(TextAnchor))
+        {
+            TextMesh textMesh = new GameObject("TextMesh", typeof(TextMesh)).GetComponent<TextMesh>();
+
+            textMesh.transform.position = position;
+            textMesh.fontSize = fontSize;
+            textMesh.characterSize = 0.1f;
+            textMesh.alignment = textAlignment;
+            textMesh.anchor = textAnchor;
+
+            textMesh.text = text;
+
+            return textMesh;
+        }
+
+        #endregion
+
         #region Methods
         /*********/
         /*Methods*/
         /*********/
+
+        public static Vector3 GetMouseWorldLocation()
+        {
+            return Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        }
+
+        public static Vector3 GetMouseWorldLocation(Camera camera)
+        {
+            return camera.ScreenToWorldPoint(Input.mousePosition);
+        }
 
         public static List<T> GetEnumListByType<T>()
         {
@@ -192,6 +224,20 @@ namespace AlpacaMyGames
         /************/
         /*Extensions*/
         /************/
+
+        public static void RemoveRandomElement<T>(this List<T> list)
+        {
+            int randomIndex = Random.Range(0, list.Count);
+            list.RemoveAt(randomIndex);
+        }
+
+        public static T GetRandomElement<T>(this List<T> list)
+        {
+            if (list.Count == 0)
+                return default(T);
+
+            return list[Random.Range(0, list.Count)];
+        }
 
         public static Vector3 InvertVector(this Vector3 vector)
         {
