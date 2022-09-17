@@ -106,7 +106,7 @@ namespace AlpacaMyGames
         {
             float scale = objectToCheck.localScale.x;
 
-            Collider2D[] hits = Physics2D.OverlapCircleAll(objectToCheck.position, environmentRadius * scale, objectsToAvoid);
+            Collider2D[] hits = Physics2D.OverlapCircleAll(objectToCheck.position, environmentRadius + scale, objectsToAvoid);
 
             if (hits.Length > 1)
                 return true;
