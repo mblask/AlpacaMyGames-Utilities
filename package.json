@@ -14,5 +14,6 @@
     "name": "Marko Blaskovic",
     "email": "mblask2903@gmail.com",
     "url": "https://www.google.com/"
-  }
+  },
+  "hideInEditor": false
 }

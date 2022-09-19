@@ -33,6 +33,31 @@ namespace AlpacaMyGames
         /*Methods*/
         /*********/
 
+        public static int RandomInt(int maxExclusive)
+        {
+            return RandomInt(0, maxExclusive);
+        }
+
+        public static int RandomInt(int minInclusive, int maxExclusive)
+        {
+            return UnityEngine.Random.Range(minInclusive, maxExclusive);
+        }
+
+        public static float RandomFloat(float maxInclusive)
+        {
+            return RandomFloat(0.0f, maxInclusive);
+        }
+
+        public static float RandomFloat(float minInclusive, float maxInclusive)
+        {
+            return UnityEngine.Random.Range(minInclusive, maxInclusive);
+        }
+
+        public static LayerMask GetLayerMask(string layerName)
+        {
+            return LayerMask.NameToLayer(layerName);
+        }
+
         public static Vector3 GetMouseWorldLocation()
         {
             return Camera.main.ScreenToWorldPoint(Input.mousePosition);
