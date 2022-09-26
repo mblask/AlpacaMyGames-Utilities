@@ -33,6 +33,35 @@ namespace AlpacaMyGames
         /*Methods*/
         /*********/
 
+        public static int[] FibonacciTo(int number)
+        {
+            int[] sequence = new int[number];
+
+            for (int i = 0; i < number; i++)
+                sequence[i] = FibonacciAt(i);
+
+            return sequence;
+        }
+
+        public static int FibonacciAt(int number)
+        {
+            if (number == 0)
+                return 0;
+
+            if (number == 1)
+                return 1;
+
+            return FibonacciAt(number - 1) + FibonacciAt(number - 2);
+        }
+
+        public static int Factorial(int number)
+        {
+            if (number == 0)
+                return 1;
+
+            return number * Factorial(number - 1);
+        }
+
         public static int RandomInt(int maxExclusive)
         {
             return RandomInt(0, maxExclusive);
