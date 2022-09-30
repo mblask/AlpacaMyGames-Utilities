@@ -279,6 +279,20 @@ namespace AlpacaMyGames
         /*Extensions*/
         /************/
 
+        public static float SumAll(this List<float> list)
+        {
+            float sum = 0.0f;
+            list.ForEach(x => { sum += x; });
+            return sum;
+        }
+
+        public static int SumAll(this List<int> list)
+        {
+            int sum = 0;
+            list.ForEach(x => { sum += x; });
+            return sum;
+        }
+
         public static void RemoveRandomElement<T>(this List<T> list)
         {
             int randomIndex = Random.Range(0, list.Count);
