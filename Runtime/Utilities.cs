@@ -168,21 +168,133 @@ namespace AlpacaMyGames
                 return false;
         }
 
-        public static Vector2 GetRandomWorldPosition(float shorteningFactor = 1.0f, Vector2 worldOriginPosition = default(Vector2))
+        public static List<Vector2> GetListOfRandom2DLocations(int numberOfLocations, float emptyRadiusAroundLocation = 0.0f, float borderMargin = 0.0f)
         {
-            Vector3 randomScreenPosition = Vector2.up * Screen.height * UnityEngine.Random.Range(0.0f, 1.0f) +
-                        Vector2.right * Screen.width * UnityEngine.Random.Range(0.0f, 1.0f);
+            List<Vector2> listOfLocations = new List<Vector2>();
+
+            int iterations = 0;
+            for (int i = 0; i < numberOfLocations; i++)
+            {
+                iterations++;
+
+                Vector2 position = GetRandomWorldPositionFromScreen(borderMargin);
+
+                bool positionsTooClose = false;
+                float iteratedRadius = (iterations > numberOfLocations * 2) ? emptyRadiusAroundLocation * 0.5f : emptyRadiusAroundLocation;
+                foreach (Vector2 location in listOfLocations)
+                {
+                    if (Vector2.Distance(location, position) < iteratedRadius)
+                    {
+                        positionsTooClose = true;
+                        break;
+                    }
+                }
+
+                if (!positionsTooClose)
+                    listOfLocations.Add(position);
+                else
+                    i--;
+
+                if (iterations > numberOfLocations * 3)
+                    break;
+            }
+
+            if (listOfLocations.Count < numberOfLocations)
+                Debug.LogError((numberOfLocations - listOfLocations.Count) + " locations not possible to spawn. Decrease the number or the empty radius!");
+
+            return listOfLocations;
+        }
+
+        public static Vector2 GetRandomWorldPositionFromScreen(float borderMargin = 0.0f, Vector2 worldOriginPosition = default(Vector2))
+        {
+            Vector3 randomScreenPosition = GetRandomScreenPosition(borderMargin);
+            Vector2 randomPosition = Camera.main.ScreenToWorldPoint(randomScreenPosition);
+
+            return worldOriginPosition + randomPosition;
+        }
+
+        public static Vector2 GetRandomScreenPosition(float borderMargin = 0.0f)
+        {
+            if (borderMargin < 0.0f || borderMargin > 0.5f)
+            {
+                Debug.LogError("Border margin should be from 0.0f to 0.5f!");
+                return Vector2.zero;
+            }
+
+            return new Vector2(
+                UnityEngine.Random.Range(borderMargin, 1.0f - borderMargin) * Screen.width,
+                UnityEngine.Random.Range(borderMargin, 1.0f - borderMargin) * Screen.height
+                );
+        }
+
+        /*
+        
+        
+        //OLD VERSIONS
+
+
+        public static List<Vector2> GetListOfRandom2DLocations(int numberOfLocations, float emptyRadiusAroundLocation = 0.0f, float borderMargin = 1.0f)
+        {
+            List<Vector2> listOfLocations = new List<Vector2>();
+
+            int iterations = 0;
+            for (int i = 0; i < numberOfLocations; i++)
+            {
+                iterations++;
+
+                Vector2 position = GetRandomWorldPositionFromScreen(borderMargin);
+
+                bool positionsTooClose = false;
+                float iteratedRadius = (iterations > numberOfLocations * 2) ? emptyRadiusAroundLocation * 0.5f : emptyRadiusAroundLocation;
+                foreach (Vector2 location in listOfLocations)
+                {
+                    if (Vector2.Distance(location, position) < iteratedRadius)
+                    {
+                        positionsTooClose = true;
+                        break;
+                    }
+                }
+
+                if (!positionsTooClose)
+                    listOfLocations.Add(position);
+                else
+                    i--;
+
+                if (iterations > numberOfLocations * 3)
+                    break;
+            }
+
+            if (listOfLocations.Count < numberOfLocations)
+                Debug.LogError(numberOfLocations - listOfLocations.Count + " locations not possible to spawn. Decrease the number or the empty radius!");
+
+            return listOfLocations;
+        }
+
+
+        public static Vector2 GetRandomWorldPositionFromScreen(float shorteningFactor = 1.0f, Vector2 worldOriginPosition = default(Vector2))
+        {
+            //Vector3 randomScreenPosition = 
+            //    Vector2.right   * UnityEngine.Random.Range(0.0f, 1.0f) * Screen.width +
+            //    Vector2.up      * UnityEngine.Random.Range(0.0f, 1.0f) * Screen.height;
+
+            Vector3 randomScreenPosition = GetRandomScreenPosition();
+
             Vector2 randomPosition = Camera.main.ScreenToWorldPoint(randomScreenPosition) / shorteningFactor;
 
             return worldOriginPosition + randomPosition;
         }
 
+
         public static Vector2 GetRandomScreenPosition(float borderScaling = 1.0f)
         {
             float x0y0 = 1.0f - borderScaling;
 
-            return new Vector2(Random.Range(x0y0, 1.0f) * borderScaling * Screen.width, Random.Range(x0y0, 1.0f) * borderScaling * Screen.height);
+            return new Vector2(
+                borderScaling * UnityEngine.Random.Range(x0y0, 1.0f) * Screen.width,
+                borderScaling * UnityEngine.Random.Range(x0y0, 1.0f) * Screen.height
+                );
         }
+        */
 
         public static bool IsInsideScreen(Vector2 position)
         {
