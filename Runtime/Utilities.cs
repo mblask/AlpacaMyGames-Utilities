@@ -33,6 +33,11 @@ namespace AlpacaMyGames
         /*Methods*/
         /*********/
 
+        public static Vector2 GetVectorFromAngle(float angleInDegrees)
+        {
+            return Vector2.up * Mathf.Cos(angleInDegrees * Mathf.Deg2Rad) + Vector2.right * Mathf.Sin(angleInDegrees * Mathf.Deg2Rad);
+        }
+
         public static int[] FibonacciTo(int number)
         {
             int[] sequence = new int[number];
