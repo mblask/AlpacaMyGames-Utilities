@@ -35,7 +35,7 @@ namespace AlpacaMyGames
 
         public static Vector2 GetVectorFromAngle(float angleInDegrees)
         {
-            return Vector2.up * Mathf.Cos(angleInDegrees * Mathf.Deg2Rad) + Vector2.right * Mathf.Sin(angleInDegrees * Mathf.Deg2Rad);
+            return Vector2.up * Mathf.Sin(angleInDegrees * Mathf.Deg2Rad) + Vector2.right * Mathf.Cos(angleInDegrees * Mathf.Deg2Rad);
         }
 
         public static int[] FibonacciTo(int number)
@@ -396,6 +396,23 @@ namespace AlpacaMyGames
         /*Extensions*/
         /************/
 
+        public static Transform AddNewGameObject(this Transform transform, string objectName)
+        {
+            Transform newTransform = new GameObject(objectName).transform;
+            newTransform.SetParent(transform);
+
+            return newTransform;
+        }
+
+        public static bool AddIfNone<T>(this List<T> list, T element)
+        {
+            if (list.Contains(element))
+                return false;
+
+            list.Add(element);
+            return true;
+        }
+
         public static float SumAll(this List<float> list)
         {
             float sum = 0.0f;
@@ -418,10 +435,33 @@ namespace AlpacaMyGames
 
         public static T GetRandomElement<T>(this List<T> list)
         {
+            if (list == null)
+                return default(T);
+
             if (list.Count == 0)
                 return default(T);
 
             return list[Random.Range(0, list.Count)];
+        }
+
+        public static float Sum(this Vector2 vector2)
+        {
+            return vector2.x + vector2.y;
+        }
+
+        public static float Sum(this Vector3 vector3)
+        {
+            return vector3.x + vector3.y + vector3.z;
+        }
+
+        public static float Average(this Vector3 vector3)
+        {
+            return (vector3.x + vector3.y + vector3.z) / 3.0f;
+        }
+
+        public static float Average(this Vector2 vector2)
+        {
+            return (vector2.x + vector2.y) / 2.0f;
         }
 
         public static Vector3 InvertVector(this Vector3 vector)
