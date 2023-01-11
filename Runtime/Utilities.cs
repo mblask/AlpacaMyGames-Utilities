@@ -33,6 +33,22 @@ namespace AlpacaMyGames
         /*Methods*/
         /*********/
 
+        public static List<T> GetListOfObjectsFromContainer<T>(Transform containerTransform, string subcontainerName = "")
+        {
+            if (containerTransform == null)
+                return null;
+
+            if (subcontainerName.Equals(""))
+                return new List<T>(containerTransform.GetComponentsInChildren<T>());
+
+            Transform subcontainer = containerTransform.Find(subcontainerName);
+
+            if (subcontainer == null)
+                return null;
+
+            return new List<T>(subcontainer.GetComponentsInChildren<T>());
+        }
+
         public static Vector2 GetVectorFromAngle(float angleInDegrees)
         {
             return Vector2.up * Mathf.Sin(angleInDegrees * Mathf.Deg2Rad) + Vector2.right * Mathf.Cos(angleInDegrees * Mathf.Deg2Rad);
@@ -210,6 +226,25 @@ namespace AlpacaMyGames
             return listOfLocations;
         }
 
+        public static Vector2 GetRandomBoundaryPosition()
+        {
+            Vector2 cameraOrthographicSize = GetWorldOrthographicCameraSize();
+            Vector2 position = new Vector2();
+
+            if (ChanceFunc(50))
+            {
+                position.x = ChanceFunc(50) ? -cameraOrthographicSize.x : cameraOrthographicSize.x;
+                position.y = Random.Range(-cameraOrthographicSize.y, cameraOrthographicSize.y);
+            }
+            else
+            {
+                position.x = Random.Range(-cameraOrthographicSize.x, cameraOrthographicSize.x);
+                position.y = ChanceFunc(50) ? -cameraOrthographicSize.y : cameraOrthographicSize.y;
+            }
+
+            return position;
+        }
+
         public static Vector2 GetRandomWorldPositionFromScreen(float borderMargin = 0.0f, Vector2 worldOriginPosition = default(Vector2))
         {
             Vector3 randomScreenPosition = GetRandomScreenPosition(borderMargin);
@@ -232,81 +267,18 @@ namespace AlpacaMyGames
                 );
         }
 
-        /*
-        
-        
-        //OLD VERSIONS
-
-
-        public static List<Vector2> GetListOfRandom2DLocations(int numberOfLocations, float emptyRadiusAroundLocation = 0.0f, float borderMargin = 1.0f)
+        public static bool IsInsideWorldScreen(Vector2 position, Vector2 worldMarginXY = default(Vector2))
         {
-            List<Vector2> listOfLocations = new List<Vector2>();
-
-            int iterations = 0;
-            for (int i = 0; i < numberOfLocations; i++)
-            {
-                iterations++;
-
-                Vector2 position = GetRandomWorldPositionFromScreen(borderMargin);
-
-                bool positionsTooClose = false;
-                float iteratedRadius = (iterations > numberOfLocations * 2) ? emptyRadiusAroundLocation * 0.5f : emptyRadiusAroundLocation;
-                foreach (Vector2 location in listOfLocations)
-                {
-                    if (Vector2.Distance(location, position) < iteratedRadius)
-                    {
-                        positionsTooClose = true;
-                        break;
-                    }
-                }
-
-                if (!positionsTooClose)
-                    listOfLocations.Add(position);
-                else
-                    i--;
-
-                if (iterations > numberOfLocations * 3)
-                    break;
-            }
-
-            if (listOfLocations.Count < numberOfLocations)
-                Debug.LogError(numberOfLocations - listOfLocations.Count + " locations not possible to spawn. Decrease the number or the empty radius!");
-
-            return listOfLocations;
+            Vector2 cameraOrthographicSize = GetWorldOrthographicCameraSize();
+            return position.x > -1 * (worldMarginXY.x + cameraOrthographicSize.x) &&
+                   position.x < +1 * (worldMarginXY.x + cameraOrthographicSize.x) &&
+                   position.y < +1 * (worldMarginXY.y + cameraOrthographicSize.y) &&
+                   position.y > -1 * (worldMarginXY.y + cameraOrthographicSize.y);
         }
-
-
-        public static Vector2 GetRandomWorldPositionFromScreen(float shorteningFactor = 1.0f, Vector2 worldOriginPosition = default(Vector2))
-        {
-            //Vector3 randomScreenPosition = 
-            //    Vector2.right   * UnityEngine.Random.Range(0.0f, 1.0f) * Screen.width +
-            //    Vector2.up      * UnityEngine.Random.Range(0.0f, 1.0f) * Screen.height;
-
-            Vector3 randomScreenPosition = GetRandomScreenPosition();
-
-            Vector2 randomPosition = Camera.main.ScreenToWorldPoint(randomScreenPosition) / shorteningFactor;
-
-            return worldOriginPosition + randomPosition;
-        }
-
-
-        public static Vector2 GetRandomScreenPosition(float borderScaling = 1.0f)
-        {
-            float x0y0 = 1.0f - borderScaling;
-
-            return new Vector2(
-                borderScaling * UnityEngine.Random.Range(x0y0, 1.0f) * Screen.width,
-                borderScaling * UnityEngine.Random.Range(x0y0, 1.0f) * Screen.height
-                );
-        }
-        */
 
         public static bool IsInsideScreen(Vector2 position)
         {
-            if (position.x >= 0.0f && position.x < Screen.width && position.y >= 0.0f && position.y < Screen.height)
-                return true;
-            else
-                return false;
+            return position.x >= 0.0f && position.x < Screen.width && position.y >= 0.0f && position.y < Screen.height;
         }
 
         public static float GetWorldCameraRatio()
@@ -398,6 +370,9 @@ namespace AlpacaMyGames
 
         public static Transform AddNewGameObject(this Transform transform, string objectName)
         {
+            if (transform.Find(objectName) != null)
+                return null;
+
             Transform newTransform = new GameObject(objectName).transform;
             newTransform.SetParent(transform);
 
