@@ -49,6 +49,7 @@ namespace AlpacaMyGames
             return new List<T>(subcontainer.GetComponentsInChildren<T>());
         }
 
+        //0 degree is the positive x axis (right), 90 degrees is the positive y axis (up) 
         public static Vector2 GetVectorFromAngle(float angleInDegrees)
         {
             return Vector2.up * Mathf.Sin(angleInDegrees * Mathf.Deg2Rad) + Vector2.right * Mathf.Cos(angleInDegrees * Mathf.Deg2Rad);
@@ -106,6 +107,12 @@ namespace AlpacaMyGames
         public static LayerMask GetLayerMask(string layerName)
         {
             return LayerMask.NameToLayer(layerName);
+        }
+
+        public static Vector2 GetMouseWorldLocation2D()
+        {
+            Vector2 position = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            return position;
         }
 
         public static Vector3 GetMouseWorldLocation()
