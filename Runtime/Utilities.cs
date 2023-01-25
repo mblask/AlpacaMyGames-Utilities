@@ -233,7 +233,7 @@ namespace AlpacaMyGames
             return listOfLocations;
         }
 
-        public static Vector2 GetRandomBoundaryPosition()
+        public static Vector2 GetRandomBoundaryPosition(Vector2 margin = default(Vector2))
         {
             Vector2 cameraOrthographicSize = GetWorldOrthographicCameraSize();
             Vector2 position = new Vector2();
@@ -241,12 +241,20 @@ namespace AlpacaMyGames
             if (ChanceFunc(50))
             {
                 position.x = ChanceFunc(50) ? -cameraOrthographicSize.x : cameraOrthographicSize.x;
+                if (position.x > 0.0f)
+                    position.x += margin.x;
+                else
+                    position.x -= margin.x;
                 position.y = Random.Range(-cameraOrthographicSize.y, cameraOrthographicSize.y);
             }
             else
             {
                 position.x = Random.Range(-cameraOrthographicSize.x, cameraOrthographicSize.x);
                 position.y = ChanceFunc(50) ? -cameraOrthographicSize.y : cameraOrthographicSize.y;
+                if (position.y > 0.0f)
+                    position.y += margin.y;
+                else
+                    position.y -= margin.y;
             }
 
             return position;
@@ -378,7 +386,7 @@ namespace AlpacaMyGames
         public static Transform AddNewGameObject(this Transform transform, string objectName)
         {
             if (transform.Find(objectName) != null)
-                return null;
+                return transform.Find(objectName);
 
             Transform newTransform = new GameObject(objectName).transform;
             newTransform.SetParent(transform);
