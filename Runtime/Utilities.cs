@@ -1,5 +1,7 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Text;
 using UnityEngine;
 
 namespace AlpacaMyGames
@@ -32,6 +34,43 @@ namespace AlpacaMyGames
         /*********/
         /*Methods*/
         /*********/
+
+        public static string EnumToString<T>(T enumElement) where T : Enum
+        {
+            string enumString = enumElement.ToString();
+            string loweredEnumString = enumString.ToLower();
+            char spaceCharacter = ' ';
+            StringBuilder sb = new StringBuilder();
+            for (int i = 0; i < enumString.Length; i++)
+            {
+                if (i != 0 && enumString[i] != loweredEnumString[i])
+                    sb.Append(spaceCharacter);
+
+                if (i != 0 && char.IsDigit(enumString[i]))
+                    sb.Append(spaceCharacter);
+
+                sb.Append(enumString[i]);
+            }
+
+            return sb.ToString();
+        }
+
+        public static Vector3 GetRandomVector3(float randomRadius = 1.0f)
+        {
+            Vector3 randomVector = new Vector3(UnityEngine.Random.Range(-1.0f, 1.0f), UnityEngine.Random.Range(-1.0f, 1.0f), UnityEngine.Random.Range(-1.0f, 1.0f)).normalized * randomRadius;
+            return randomVector;
+        }
+
+        public static Vector2 GetRandomVector2(float randomRadius = 1.0f)
+        {
+            Vector2 randomVector = new Vector2(UnityEngine.Random.Range(-1.0f, 1.0f), UnityEngine.Random.Range(-1.0f, 1.0f)).normalized * randomRadius;
+            return randomVector;
+        }
+
+        public static int GetEnumLength<T>()
+        {
+            return Enum.GetValues(typeof(T)).Length;
+        }
 
         public static List<T> GetListOfObjectsFromContainer<T>(Transform containerTransform, string subcontainerName = "")
         {
@@ -117,7 +156,8 @@ namespace AlpacaMyGames
 
         public static Vector3 GetMouseWorldLocation()
         {
-            return Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            Vector2 location = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            return location;
         }
 
         public static Vector3 GetMouseWorldLocation(Camera camera)
@@ -167,7 +207,7 @@ namespace AlpacaMyGames
             if (percentageChance == 100)
                 return true;
 
-            int randomNumber = Random.Range(0, 101);
+            int randomNumber = UnityEngine.Random.Range(0, 101);
 
             return randomNumber <= percentageChance;
         }
@@ -180,7 +220,7 @@ namespace AlpacaMyGames
             if (percentageChance == 100.0f)
                 return true;
 
-            float randomNumber = Random.Range(0.0f, 100.0f);
+            float randomNumber = UnityEngine.Random.Range(0.0f, 100.0f);
             return randomNumber <= percentageChance;
         }
 
@@ -233,6 +273,36 @@ namespace AlpacaMyGames
             return listOfLocations;
         }
 
+        public static Vector2 GetRandomXBoundaryPosition(float margin = 0.0f, int side = 1)
+        {
+            Vector2 cameraOrthographicSize = GetWorldOrthographicCameraSize();
+            Vector2 position = new Vector2();
+
+            position.x = side * cameraOrthographicSize.x;
+            if (position.x > 0.0f)
+                position.x += margin;
+            else
+                position.x -= margin;
+            position.y = UnityEngine.Random.Range(-cameraOrthographicSize.y, cameraOrthographicSize.y);
+
+            return position;
+        }
+
+        public static Vector2 GetRandomYBoundaryPosition(float margin = 0.0f, int side = 1)
+        {
+            Vector2 cameraOrthographicSize = GetWorldOrthographicCameraSize();
+            Vector2 position = new Vector2();
+
+            position.y = side * cameraOrthographicSize.y;
+            if (position.y > 0.0f)
+                position.y += margin;
+            else
+                position.y -= margin;
+            position.x = UnityEngine.Random.Range(-cameraOrthographicSize.x, cameraOrthographicSize.x);
+
+            return position;
+        }
+
         public static Vector2 GetRandomBoundaryPosition(Vector2 margin = default(Vector2))
         {
             Vector2 cameraOrthographicSize = GetWorldOrthographicCameraSize();
@@ -245,11 +315,11 @@ namespace AlpacaMyGames
                     position.x += margin.x;
                 else
                     position.x -= margin.x;
-                position.y = Random.Range(-cameraOrthographicSize.y, cameraOrthographicSize.y);
+                position.y = UnityEngine.Random.Range(-cameraOrthographicSize.y, cameraOrthographicSize.y);
             }
             else
             {
-                position.x = Random.Range(-cameraOrthographicSize.x, cameraOrthographicSize.x);
+                position.x = UnityEngine.Random.Range(-cameraOrthographicSize.x, cameraOrthographicSize.x);
                 position.y = ChanceFunc(50) ? -cameraOrthographicSize.y : cameraOrthographicSize.y;
                 if (position.y > 0.0f)
                     position.y += margin.y;
@@ -383,6 +453,16 @@ namespace AlpacaMyGames
         /*Extensions*/
         /************/
 
+        public static int GetRandom(this Vector2Int vector)
+        {
+            return UnityEngine.Random.Range(vector.x, vector.y);
+        }
+
+        public static void DestroyObject(this Transform transform, float destroyAfter = 0.0f)
+        {
+            UnityEngine.Object.Destroy(transform.gameObject, destroyAfter);
+        }
+
         public static Transform AddNewGameObject(this Transform transform, string objectName)
         {
             if (transform.Find(objectName) != null)
@@ -419,7 +499,7 @@ namespace AlpacaMyGames
 
         public static void RemoveRandomElement<T>(this List<T> list)
         {
-            int randomIndex = Random.Range(0, list.Count);
+            int randomIndex = UnityEngine.Random.Range(0, list.Count);
             list.RemoveAt(randomIndex);
         }
 
@@ -431,7 +511,7 @@ namespace AlpacaMyGames
             if (list.Count == 0)
                 return default(T);
 
-            return list[Random.Range(0, list.Count)];
+            return list[UnityEngine.Random.Range(0, list.Count)];
         }
 
         public static float Sum(this Vector2 vector2)
