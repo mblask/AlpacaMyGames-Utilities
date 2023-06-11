@@ -35,6 +35,12 @@ namespace AlpacaMyGames
         /*Methods*/
         /*********/
 
+        /// <summary>
+        /// Returns a string representation of an <see cref="Enum"/> value
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="enumElement"></param>
+        /// <returns><see cref="string"/></returns>
         public static string EnumToString<T>(T enumElement) where T : Enum
         {
             string enumString = enumElement.ToString();
@@ -55,18 +61,74 @@ namespace AlpacaMyGames
             return sb.ToString();
         }
 
+        /// <summary>
+        /// Returns a random <see cref="Vector3"/> with length <paramref name="randomRadius"/>, which is 1 by default
+        /// </summary>
+        /// <param name="randomRadius"></param>
+        /// <returns>Randomized <see cref="Vector3"/></returns>
         public static Vector3 GetRandomVector3(float randomRadius = 1.0f)
         {
-            Vector3 randomVector = new Vector3(UnityEngine.Random.Range(-1.0f, 1.0f), UnityEngine.Random.Range(-1.0f, 1.0f), UnityEngine.Random.Range(-1.0f, 1.0f)).normalized * randomRadius;
+            Vector3 randomVector = 
+                new Vector3(
+                    UnityEngine.Random.Range(-1.0f, 1.0f), 
+                    UnityEngine.Random.Range(-1.0f, 1.0f), 
+                    UnityEngine.Random.Range(-1.0f, 1.0f)).normalized * randomRadius;
             return randomVector;
         }
 
+        /// <summary>
+        /// Returns a random <see cref="Vector2"/> with length <paramref name="randomRadius"/>, which is 1 by default
+        /// </summary>
+        /// <param name="randomRadius"></param>
+        /// <returns>Randomized <see cref="Vector2"/></returns>
         public static Vector2 GetRandomVector2(float randomRadius = 1.0f)
         {
-            Vector2 randomVector = new Vector2(UnityEngine.Random.Range(-1.0f, 1.0f), UnityEngine.Random.Range(-1.0f, 1.0f)).normalized * randomRadius;
+            Vector2 randomVector = 
+                new Vector2(
+                    UnityEngine.Random.Range(-1.0f, 1.0f), 
+                    UnityEngine.Random.Range(-1.0f, 1.0f)).normalized * randomRadius;
             return randomVector;
         }
 
+        /// <summary>
+        /// Returns a random <see cref="Enum"/> value of type <typeparamref name="T"/> where one value is excluded
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="excluding"></param>
+        /// <returns><see cref="Enum"/> of tpye <typeparamref name="T"/></returns>
+        public static T GetRandomEnumValueExcluding<T>(T excluding) where T : Enum
+        {
+            Type type = typeof(T);
+            Array values = Enum.GetValues(type);
+            List<T> listOfValues = new List<T>(values.Length);
+            foreach (T element in values)
+            {
+                if (element.Equals(excluding))
+                    continue;
+
+                listOfValues.Add(element);
+            }
+
+            return listOfValues.GetRandomElement();
+        }
+
+        /// <summary>
+        /// Returns a random <see cref="Enum"/> value of type <typeparamref name="T"/>
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <returns><see cref="Enum"/> of type <typeparamref name="T"/></returns>
+        public static T GetRandomEnumValue<T>() where T : Enum
+        {
+            Type type = typeof(T);
+            Array values = Enum.GetValues(type);
+            return (T)values.GetValue(RandomInt(values.Length));
+        }
+
+        /// <summary>
+        /// Returns the number of elements of an <see cref="Enum"/> of type <typeparamref name="T"/>
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <returns>Length as <see cref="int"/></returns>
         public static int GetEnumLength<T>()
         {
             return Enum.GetValues(typeof(T)).Length;
@@ -88,7 +150,7 @@ namespace AlpacaMyGames
             return new List<T>(subcontainer.GetComponentsInChildren<T>());
         }
 
-        //0 degree is the positive x axis (right), 90 degrees is the positive y axis (up) 
+        //0 degree is the positive x axis (right), 90 degrees is the positive y axis (up)
         public static Vector2 GetVectorFromAngle(float angleInDegrees)
         {
             return Vector2.up * Mathf.Sin(angleInDegrees * Mathf.Deg2Rad) + Vector2.right * Mathf.Cos(angleInDegrees * Mathf.Deg2Rad);
