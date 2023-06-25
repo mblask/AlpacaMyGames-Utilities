@@ -62,22 +62,45 @@ namespace AlpacaMyGames
         }
 
         /// <summary>
-        /// Returns a random <see cref="Vector3"/> with length <paramref name="randomRadius"/>, which is 1 by default
+        /// Returns a randomly oriented <see cref="Vector3"/> with a random length up to <paramref name="maxRadius"/>
+        /// </summary>
+        /// <param name="maxRadius"></param>
+        /// <param name="includeZ"></param>
+        /// <returns>Randomized <see cref="Vector3"/></returns>
+        public static Vector3 GetRandomLengthVector3(float maxRadius = 1.0f, bool includeZ = true)
+        {
+            Vector3 randomVector = new Vector3(
+                UnityEngine.Random.Range(-1.0f, 1.0f) * maxRadius,
+                UnityEngine.Random.Range(-1.0f, 1.0f) * maxRadius,
+                0.0f);
+
+            if (includeZ)
+                randomVector.z = UnityEngine.Random.Range(-1.0f, 1.0f) * maxRadius;
+
+            return randomVector;
+        }
+
+        /// <summary>
+        /// Returns a randomly oriented <see cref="Vector3"/> with length <paramref name="randomRadius"/>, which is 1 by default
         /// </summary>
         /// <param name="randomRadius"></param>
         /// <returns>Randomized <see cref="Vector3"/></returns>
-        public static Vector3 GetRandomVector3(float randomRadius = 1.0f)
+        public static Vector3 GetRandomVector3(float randomRadius = 1.0f, bool includeZ = true)
         {
             Vector3 randomVector = 
                 new Vector3(
                     UnityEngine.Random.Range(-1.0f, 1.0f), 
                     UnityEngine.Random.Range(-1.0f, 1.0f), 
-                    UnityEngine.Random.Range(-1.0f, 1.0f)).normalized * randomRadius;
+                    0.0f).normalized * randomRadius;
+
+            if (includeZ)
+                randomVector.z = UnityEngine.Random.Range(-1.0f, 1.0f);
+
             return randomVector;
         }
 
         /// <summary>
-        /// Returns a random <see cref="Vector2"/> with length <paramref name="randomRadius"/>, which is 1 by default
+        /// Returns a randomly oriented <see cref="Vector2"/> with length <paramref name="randomRadius"/>, which is 1 by default
         /// </summary>
         /// <param name="randomRadius"></param>
         /// <returns>Randomized <see cref="Vector2"/></returns>
@@ -156,6 +179,11 @@ namespace AlpacaMyGames
             return Vector2.up * Mathf.Sin(angleInDegrees * Mathf.Deg2Rad) + Vector2.right * Mathf.Cos(angleInDegrees * Mathf.Deg2Rad);
         }
 
+        /// <summary>
+        /// Returns a Fibonacci sequence up to a number
+        /// </summary>
+        /// <param name="number"></param>
+        /// <returns><see cref="Array"/> of <see cref="int"/></returns>
         public static int[] FibonacciTo(int number)
         {
             int[] sequence = new int[number];
@@ -166,6 +194,11 @@ namespace AlpacaMyGames
             return sequence;
         }
 
+        /// <summary>
+        /// Returns a Fibonacci sequence member at number
+        /// </summary>
+        /// <param name="number"></param>
+        /// <returns><see cref="int"/></returns>
         public static int FibonacciAt(int number)
         {
             if (number == 0)
@@ -185,21 +218,43 @@ namespace AlpacaMyGames
             return number * Factorial(number - 1);
         }
 
+        /// <summary>
+        /// Returns a random integer from 0 to <paramref name="maxExclusive"/>
+        /// </summary>
+        /// <param name="maxExclusive"></param>
+        /// <returns><see cref="int"/></returns>
         public static int RandomInt(int maxExclusive)
         {
             return RandomInt(0, maxExclusive);
         }
 
+        /// <summary>
+        /// Returns a random integer from <paramref name="minInclusive"/> to <paramref name="maxExclusive"/>
+        /// </summary>
+        /// <param name="minInclusive"></param>
+        /// <param name="maxExclusive"></param>
+        /// <returns><see cref="int"/></returns>
         public static int RandomInt(int minInclusive, int maxExclusive)
         {
             return UnityEngine.Random.Range(minInclusive, maxExclusive);
         }
 
+        /// <summary>
+        /// Returns a random float from 0 to <paramref name="maxInclusive"/>
+        /// </summary>
+        /// <param name="maxInclusive"></param>
+        /// <returns><see cref="float"/></returns>
         public static float RandomFloat(float maxInclusive)
         {
             return RandomFloat(0.0f, maxInclusive);
         }
 
+        /// <summary>
+        /// Returns a random float from <paramref name="minInclusive"/> to <paramref name="maxInclusive"/>
+        /// </summary>
+        /// <param name="minInclusive"></param>
+        /// <param name="maxInclusive"></param>
+        /// <returns><see cref="float"/></returns>
         public static float RandomFloat(float minInclusive, float maxInclusive)
         {
             return UnityEngine.Random.Range(minInclusive, maxInclusive);
@@ -227,6 +282,11 @@ namespace AlpacaMyGames
             return camera.ScreenToWorldPoint(Input.mousePosition);
         }
 
+        /// <summary>
+        /// Returns a list of enums of type <typeparamref name="T"/>
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <returns><see cref="List{T}"/> of enums</returns>
         public static List<T> GetEnumListByType<T>()
         {
             List<T> newList = new List<T>();
@@ -237,6 +297,11 @@ namespace AlpacaMyGames
             return newList;
         }
 
+        /// <summary>
+        /// Returns the number of members of an enum
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <returns><see cref="int"/></returns>
         public static int GetEnumTypeAmount<T>()
         {
             int count = 0;
@@ -261,6 +326,11 @@ namespace AlpacaMyGames
             return months[monthNumber - 1];
         }
 
+        /// <summary>
+        /// Integer chance function. Input is integer percentage chance, output is true if the chance is hit, false otherwise.
+        /// </summary>
+        /// <param name="percentageChance"></param>
+        /// <returns><see cref="bool"/></returns>
         public static bool ChanceFunc(int percentageChance)
         {
             if (percentageChance == 0)
@@ -274,6 +344,11 @@ namespace AlpacaMyGames
             return randomNumber <= percentageChance;
         }
 
+        /// <summary>
+        /// Float chance function. Input is float percentage chance, output is true if the chance is hit, false otherwise.
+        /// </summary>
+        /// <param name="percentageChance"></param>
+        /// <returns><see cref="bool"/></returns>
         public static bool ChanceFunc(float percentageChance)
         {
             if (percentageChance == 0.0f)
