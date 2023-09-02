@@ -590,6 +590,11 @@ namespace AlpacaMyGames
         /*Extensions*/
         /************/
 
+        public static float GetRandom(this Vector2 vector)
+        {
+            return UnityEngine.Random.Range(vector.x, vector.y);
+        }
+
         public static int GetRandom(this Vector2Int vector)
         {
             return UnityEngine.Random.Range(vector.x, vector.y);
