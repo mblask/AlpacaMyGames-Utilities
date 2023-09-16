@@ -160,7 +160,7 @@ namespace AlpacaMyGames
         public static List<T> GetListOfObjectsFromContainer<T>(Transform containerTransform, string subcontainerName = "")
         {
             if (containerTransform == null)
-                return null;
+                return new List<T>();
 
             if (subcontainerName.Equals(""))
                 return new List<T>(containerTransform.GetComponentsInChildren<T>());
@@ -168,7 +168,7 @@ namespace AlpacaMyGames
             Transform subcontainer = containerTransform.Find(subcontainerName);
 
             if (subcontainer == null)
-                return null;
+                return new List<T>();
 
             return new List<T>(subcontainer.GetComponentsInChildren<T>());
         }
