@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Text;
 using UnityEngine;
@@ -34,6 +33,26 @@ namespace AlpacaMyGames
         /*********/
         /*Methods*/
         /*********/
+
+        public static void DrawLineSegment(List<Vector2> points)
+        {
+            float duration = 10.0f;
+            DrawLineSegment(points, UnityEngine.Color.white, duration);
+        }
+
+        public static void DrawLineSegment(List<Vector2> points, Color color, float duration)
+        {
+            if (points == null)
+                return;
+
+            for (int i = 0; i < points.Count - 1; i++)
+            {
+                Vector2 current = points[i];
+                Vector2 neighbor = points[i + 1];
+
+                Debug.DrawLine(current, neighbor, color, duration);
+            }
+        }
 
         /// <summary>
         /// Returns a string representation of an <see cref="Enum"/> value
