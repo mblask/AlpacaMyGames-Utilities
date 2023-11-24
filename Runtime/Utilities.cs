@@ -635,6 +635,14 @@ namespace AlpacaMyGames
             return newTransform;
         }
 
+        /// <summary>
+        /// If given element already exists in a list it returns false and does not add the element to the list
+        /// <br>Otherwise it adds the element to the list and returns true</br>
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="list"></param>
+        /// <param name="element"></param>
+        /// <returns><see cref="bool"/></returns>
         public static bool AddIfNone<T>(this List<T> list, T element)
         {
             if (list.Contains(element))
