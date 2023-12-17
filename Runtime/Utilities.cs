@@ -486,12 +486,27 @@ namespace AlpacaMyGames
             return position;
         }
 
+        public static Vector2 GetWorldPositionFromScreen2D(Vector2 screenPosition)
+        {
+            return Camera.main.ScreenToWorldPoint(screenPosition);
+        }
+
+        public static Vector2 GetWorldPositionFromScreen2D(Vector2 screenPosition, Camera camera)
+        {
+            return camera.ScreenToWorldPoint(screenPosition);
+        }
+
         public static Vector2 GetRandomWorldPositionFromScreen(float borderMargin = 0.0f, Vector2 worldOriginPosition = default(Vector2))
         {
             Vector3 randomScreenPosition = GetRandomScreenPosition(borderMargin);
             Vector2 randomPosition = Camera.main.ScreenToWorldPoint(randomScreenPosition);
 
             return worldOriginPosition + randomPosition;
+        }
+
+        public static Vector2 GetScreenPositionFromWorld2D(Vector2 worldPosition)
+        {
+            return Camera.main.WorldToScreenPoint(worldPosition);
         }
 
         public static Vector2 GetRandomScreenPosition(float borderMargin = 0.0f)
