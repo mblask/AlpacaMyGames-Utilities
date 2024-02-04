@@ -624,6 +624,12 @@ namespace AlpacaMyGames
         /*Extensions*/
         /************/
 
+        public static void SpawnRandomly(this GameObject gameObject, int spawnChance)
+        {
+            if (!ChanceFunc(spawnChance))
+                UnityEngine.Object.Destroy(gameObject);
+        }
+
         public static float GetRandom(this Vector2 vector)
         {
             return UnityEngine.Random.Range(vector.x, vector.y);
