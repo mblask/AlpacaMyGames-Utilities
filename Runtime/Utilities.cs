@@ -752,4 +752,59 @@ namespace AlpacaMyGames
 
         #endregion
     }
+
+    public class AlpacaInput
+    {
+        private static float _inputPressedTime = 0.0f;
+
+        /// <summary>
+        /// Handles a long press input action for mouse buttons
+        /// <br>If the input is pressed longer than <paramref name="pressTime"/>, the <paramref name="overTimeAction"/> will be performed</br>
+        /// <br>Otherwise, the <paramref name="underTimeAction"/> will be performed</br>
+        /// </summary>
+        /// <param name="mouseButton"></param>
+        /// <param name="pressTime"></param>
+        /// <param name="overTimeAction"></param>
+        /// <param name="underTimeAction"></param>
+        public static void LongPressedInput(int mouseButton, float pressTime, Action overTimeAction, Action underTimeAction)
+        {
+            if (Input.GetMouseButton(mouseButton))
+                _inputPressedTime += Time.deltaTime;
+
+            if (Input.GetMouseButtonUp(mouseButton))
+            {
+                if (_inputPressedTime >= pressTime)
+                    overTimeAction.Invoke();
+                else
+                    underTimeAction.Invoke();
+
+                _inputPressedTime = 0.0f;
+            }
+        }
+
+        /// <summary>
+        /// Handles a long press input action for keyboard keys
+        /// <br>If the input is pressed longer than <paramref name="pressTime"/>, the <paramref name="overTimeAction"/> will be performed</br>
+        /// <br>Otherwise, the <paramref name="underTimeAction"/> will be performed</br>
+        /// </summary>
+        /// <param name="keyCode"></param>
+        /// <param name="pressTime"></param>
+        /// <param name="overTimeAction"></param>
+        /// <param name="underTimeAction"></param>
+        public static void LongPressedInput(KeyCode keyCode, float pressTime, Action overTimeAction, Action underTimeAction)
+        {
+            if (Input.GetKey(keyCode))
+                _inputPressedTime += Time.deltaTime;
+
+            if (Input.GetKeyUp(keyCode))
+            {
+                if (_inputPressedTime >= pressTime)
+                    overTimeAction.Invoke();
+                else
+                    underTimeAction.Invoke();
+
+                _inputPressedTime = 0.0f;
+            }
+        }
+    }
 }
